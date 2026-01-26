@@ -1,4 +1,4 @@
-# ACDC-5v-Power-Supply
+# AC–DC 5V Power Supply
 AC–DC 5V power supply (rectifier + smoothing + regulation); final build for Cal Poly Pomona ECE 2200L Microelectronic Circuits Lab.
 
 ## Objective
@@ -12,3 +12,7 @@ Bench testing with oscilloscope and DMM; troubleshooting and characterization ac
 
 ## Results
 (Coming soon) Output voltage, ripple measurements, and scope captures.
+
+## Files
+- `docs/` — source PDFs (kept private)
+- `assets/` — photos and scope captures
