@@ -13,7 +13,7 @@ AC–DC 5V power supply (rectifier + smoothing + regulation); final build for Ca
 - [Test Points](#test-points)
 - [Altium](#altium-schematic--layout-practice)
 - [Bring-up & Testing](#bring-up--testing)
-- [Results](#results-measured)
+- [Results](#results-measured-at-output--tp3)
 - [Conclusion](#conclusion-end-to-end-behavior)
 - [Files](#files)
 
@@ -30,7 +30,7 @@ PSpice (simulation) • Oscilloscope + DMM (bench validation) • Altium (traini
 This circuit is powered from mains **through an isolated step-down transformer**. Do **not** connect mains directly to a breadboard or PCB. Use appropriate safety practices (isolation transformer, fusing, insulated connectors/enclosure) when working with AC power.
 
 ## Build diagram
-<img width="510" height="137" alt="image" src="https://github.com/user-attachments/assets/c7ebd7e7-aab3-470e-b646-784085b52fee" />
+<img width="510" height="137" alt="Build diagram" src="https://github.com/user-attachments/assets/c7ebd7e7-aab3-470e-b646-784085b52fee" />
 
 ## Architecture
 Transformer → Bridge Rectifier → Smoothing Capacitor → Regulation Stage → 5 V Output
@@ -102,10 +102,8 @@ Validated the final build on the bench using an oscilloscope and DMM. The output
 
 **Interpretation:** Under load (~100 mA), the reservoir capacitor discharges more between rectified peaks, which increases the ripple presented to the regulator. The zener/BJT stage attenuates this at the **output (TP3)**, and the measured ripple remains below the 10 mV p-p target.
 
-
 ## Conclusion (End-to-End Behavior)
 From the wall outlet, the transformer steps 120 VAC down to an isolated low-voltage AC secondary, establishing the input amplitude for the supply. The diode bridge then performs full-wave rectification, converting the AC sine into a pulsating DC waveform with a dominant ripple component near 120 Hz. The 1000 µF reservoir capacitor charges near the rectified peaks and supplies current between peaks, reducing ripple at the DC node; under load, ripple increases because the capacitor discharges more between peaks. Finally, the zener-referenced BJT pass stage provides a 5 V-class regulated output (approximately Vz − Vbe) and improves output stability by attenuating ripple at the load relative to the reservoir node. These output ripple measurements (TP3) match the expected behavior: load current increases reservoir droop between rectified peaks (higher ripple), while the zener-referenced BJT pass stage attenuates that ripple at the output. The scope captures included in this README correspond to the regulated output behavior under no-load vs ~100 mA load, validating the design target at the load.
 
 ## Files
 - `docs/` — source PDFs (kept private)
-- `assets/` — photos and scope captures
