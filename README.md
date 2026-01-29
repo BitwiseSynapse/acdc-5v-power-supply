@@ -1,5 +1,5 @@
-# AC–DC 5V Power Supply
-AC–DC 5V power supply (rectifier + smoothing + regulation); final build for Cal Poly Pomona ECE 2200L Microelectronic Circuits Lab.
+# AC DC 5V Power Supply
+AC DC 5V power supply (rectifier + smoothing + regulation); final build for Cal Poly Pomona ECE 2200L Microelectronic Circuits Lab.
 
 ## Contents
 - [Executive Summary](#executive-summary)
@@ -8,7 +8,7 @@ AC–DC 5V power supply (rectifier + smoothing + regulation); final build for Ca
 - [Safety / Disclaimer](#safety--disclaimer)
 - [Build diagram](#build-diagram)
 - [Architecture](#architecture)
-- [Components](#components-device-level-concepts-used-in-this-build)
+- [Components](#components)
 - [Functional Blocks](#functional-blocks-modules)
 - [Test Points](#test-points)
 - [Altium](#altium-schematic--layout-practice)
@@ -18,10 +18,10 @@ AC–DC 5V power supply (rectifier + smoothing + regulation); final build for Ca
 - [Files](#files)
 
 ## Executive Summary
-This project designs and bench-evaluates an AC–DC 5V power supply using a transformer, diode bridge rectifier, reservoir capacitor, and a simple zener/BJT regulation stage. The circuit was first modeled in PSpice to select key component values and estimate ripple behavior, then validated on the bench by probing each stage from the transformer output through the regulated load. The design goal was a stable ~5VDC output with low ripple under load, confirmed using oscilloscope measurements.
+This project designs and bench-evaluates an AC DC 5V power supply using a transformer, diode bridge rectifier, reservoir capacitor, and a simple zener/BJT regulation stage. The circuit was first modeled in PSpice to select key component values and estimate ripple behavior, then validated on the bench by probing each stage from the transformer output through the regulated load. The design goal was a stable ~5VDC output with low ripple under load, confirmed using oscilloscope measurements.
 
 ## Objective
-Build an AC–DC supply that produces a stable ~5VDC output with low ripple (target <10 mV p-p at the load) and document waveform behavior across each stage: rectification, smoothing, and regulation.
+Build an AC DC supply that produces a stable ~5VDC output with low ripple (target <10 mV p-p at the load) and document waveform behavior across each stage: rectification, smoothing, and regulation.
 
 ## Tools
 PSpice (simulation) • Oscilloscope + DMM (bench validation) • Altium (training)
@@ -35,7 +35,7 @@ This circuit is powered from mains **through an isolated step-down transformer**
 ## Architecture
 Transformer → Bridge Rectifier → Smoothing Capacitor → Regulation Stage → 5 V Output
 
-## Components (Device-level concepts used in this build)
+## Components
 **Diode (1N4001).** A diode primarily conducts in one direction (forward bias) and blocks current in the reverse direction (reverse bias) up to its breakdown limits. In forward conduction it exhibits an approximately constant forward drop and a non-linear I–V curve, which matters in rectifier stages because it reduces the available DC headroom.
 
 **Capacitor (1000 µF).** A capacitor stores energy in an electric field and resists rapid changes in voltage. In power supplies it is commonly used as a reservoir (smoothing) capacitor: it charges near the peaks of the rectified waveform and then supplies current between peaks, reducing ripple at the output of the rectifier.
