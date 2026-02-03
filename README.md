@@ -1,5 +1,13 @@
 # AC DC 5V Power Supply
-AC DC 5V power supply (rectifier + smoothing + regulation); final build for Cal Poly Pomona ECE 2200L Microelectronic Circuits Lab.
+AC→DC 5 V power supply (bridge rectifier + reservoir capacitor + zener-referenced BJT pass stage); final build for Cal Poly Pomona ECE 2200L Microelectronic Circuits Lab.
+
+## Specs (tested at output across RL)
+
+- Target: ~5 V DC output, ripple < 10 mV p-p at the load
+- No-load ripple (output): ~0.7 mV p-p  
+- Loaded ripple (output, RL = 50 Ω ≈ 100 mA): ~9.7 mV p-p (meets <10 mV target)
+
+**Measurement point:** All scope screenshots in this repo were taken at the output across the load resistor (RL = 50 Ω).
 
 ## Contents
 - [Executive Summary](#executive-summary)
@@ -10,18 +18,20 @@ AC DC 5V power supply (rectifier + smoothing + regulation); final build for Cal 
 - [Architecture](#architecture)
 - [Components](#components)
 - [Functional Blocks](#functional-blocks-modules)
-- [Test Points](#test-points)
+- [Measurement Point](#measurement-point-what-we-actually-probed)
 - [Altium](#altium-schematic--layout-practice)
 - [Bring-up & Testing](#bring-up--testing)
-- [Results](#results-measured-at-output--tp3)
+- [Results](#results)
 - [Conclusion](#conclusion-end-to-end-behavior)
 - [Files](#files)
 
 ## Executive Summary
-This project designs and bench-evaluates an AC DC 5V power supply using a transformer, diode bridge rectifier, reservoir capacitor, and a simple zener/BJT regulation stage. The circuit was first modeled in PSpice to select key component values and estimate ripple behavior, then validated on the bench by probing each stage from the transformer output through the regulated load. The design goal was a stable ~5VDC output with low ripple under load, confirmed using oscilloscope measurements.
+This project designs and bench-evaluates an AC DC 5V power supply using a transformer, diode bridge rectifier, reservoir capacitor, and a zener-referenced BJT pass stage. The circuit was first modeled in PSpice to select key component values and estimate ripple behavior, validated on the bench by measuring the output across the load resistor under no-load and loaded conditions, confirming ripple below the 10 mV p-p target. The design goal was a stable ~5VDC output with low ripple under load, confirmed using oscilloscope measurements.
 
 ## Objective
-Build an AC DC supply that produces a stable ~5VDC output with low ripple (target <10 mV p-p at the load) and document waveform behavior across each stage: rectification, smoothing, and regulation.
+Build an AC→DC supply that produces ~5 V DC with low ripple (target <10 mV p-p at the load), then document the measured output ripple across the load resistor under no-load and loaded conditions.
+
+Note: During lab bring-up, intermediate nodes were checked qualitatively left-to-right, but only the output across RL was captured and included here.
 
 ## Tools
 PSpice (simulation) • Oscilloscope + DMM (bench validation) • Altium (training)
@@ -33,20 +43,14 @@ This circuit is powered from mains **through an isolated step-down transformer**
 <img width="510" height="137" alt="Build diagram" src="https://github.com/user-attachments/assets/c7ebd7e7-aab3-470e-b646-784085b52fee" />
 
 ## Architecture
-Transformer → Bridge Rectifier → Smoothing Capacitor → Regulation Stage → 5 V Output
+Transformer → Bridge Rectifier → Reservoir Capacitor → Zener-Referenced BJT Pass Stage → ~5 V Output
 
-## Components
-**Diode (1N4001).** A diode primarily conducts in one direction (forward bias) and blocks current in the reverse direction (reverse bias) up to its breakdown limits. In forward conduction it exhibits an approximately constant forward drop and a non-linear I–V curve, which matters in rectifier stages because it reduces the available DC headroom.
-
-**Capacitor (1000 µF).** A capacitor stores energy in an electric field and resists rapid changes in voltage. In power supplies it is commonly used as a reservoir (smoothing) capacitor: it charges near the peaks of the rectified waveform and then supplies current between peaks, reducing ripple at the output of the rectifier.
-
-**Resistor (R1 = 5 Ω, R2 = 100 Ω, RL = 50 Ω).** Resistors set currents and voltage drops. In this circuit, R1 provides series resistance between the reservoir node and the regulation stage (helping limit surge and isolate stages), R2 biases the zener/reference and transistor base node, and RL represents the load used for testing (≈100 mA at ~5 V).
-
-**BJT (2N2222, NPN).** A bipolar junction transistor uses a small base current to control a larger collector–emitter current. In this supply it functions as a series pass element (emitter follower behavior), providing current gain so the load can be driven while the reference network sets the approximate output voltage.
-
-**Zener diode (1N752).** A zener diode is designed to operate in reverse breakdown to provide an approximately constant reference voltage over a range of current. In this circuit it provides a voltage reference at the transistor base; the output is then approximately the zener voltage minus the transistor’s base–emitter drop.
-
-**Transformer (120 V : 6.3 V).** The transformer provides galvanic isolation and steps mains voltage down to a low-voltage AC source. The secondary is rated in RMS and remains sinusoidal at 60 Hz, forming the input to the rectification stage.
+## Key Components
+- **Bridge (4× 1N4001):** full-wave rectification from the transformer secondary.
+- **Reservoir capacitor (1000 µF):** reduces ripple by supplying current between rectified peaks.
+- **Zener (1N752) + R2 (100 Ω):** sets an approximate reference at the BJT base.
+- **BJT pass transistor (2N2222):** emitter follower that provides current gain; output ≈ Vz − Vbe.
+- **Load (RL = 50 Ω):** test load ≈ 100 mA at ~5 V.
 
 ## Key Component Values (BOM snapshot)
 - **Transformer:** 120 VAC → 6.3 VAC RMS (isolated)
@@ -72,23 +76,33 @@ Recreated the schematic in Altium as layout practice after simulation and bench 
 
 <img width="846" height="286" alt="image" src="https://github.com/user-attachments/assets/b51a8fc5-95ef-4d18-a646-539ab0e8e067" />
 
-## Test Points
-To correlate measurements with circuit behavior, these nodes are useful probe locations:
+## Measurement Point (What we actually probed)
+All scope screenshots in this repo were taken at the **output across the load resistor (RL = 50 Ω)**.
 
-- **TP1 — Transformer secondary (AC1/AC2):** ~6.3 VAC RMS, 60 Hz sine before rectification.
-- **TP2 — Rectifier output / Reservoir node (after bridge + before regulation):** full-wave pulsating DC (~120 Hz ripple) and capacitor charge/discharge behavior.
-- **TP3 — Regulated output (across RL):** ~5 V-class DC (≈ Vz − Vbe) with minimized ripple.
+- **No-load:** output measured with the load disconnected (very small ripple).
+- **Load:** output measured across **RL = 50 Ω** (≈100 mA at ~5 V), where ripple increases but remains below the 10 mV p-p target.
+
+> Note: During lab we qualitatively checked nodes from left-to-right (transformer → bridge rectifier → reservoir capacitor → BJT/zener stage → load), but only the output (across RL) was captured and included here.
 
 ## Bring-up & Testing
-Validated the final build on the bench using an oscilloscope and DMM. The output node (TP3) was probed under no-load and under a 50 Ω load to measure DC output level and output ripple.
+The circuit was validated on the bench using an oscilloscope and DMM. The main recorded validation was **output ripple at the load resistor**, measured under:
 
-## Results (Measured at Output / TP3)
-- **No-load ripple:** ~0.7 mV p-p  
-- **Loaded ripple (RL = 50 Ω, ~100 mA):** ~9.7 mV p-p (**meets <10 mV target**)
+1) **No-load condition**
+2) **Loaded condition (RL = 50 Ω, ≈100 mA)**
+
+Ripple is reported as **peak-to-peak** at the output.
+
+## Results
+- **No-load ripple (output):** ~0.7 mV p-p  
+- **Loaded ripple (output, RL = 50 Ω, ≈100 mA):** ~9.7 mV p-p (**meets <10 mV target**)
+
+### Notes on the scope waveform
+The output of a simple rectifier/filter/regulator is **DC with residual ripple**, not perfectly flat DC.  
+Depending on scope settings (especially **AC coupling**), the display can emphasize the ripple component, which can look like a sine/triangle wave near **120 Hz** (full-wave rectified line frequency).
 
 ## Notes
-- Ripple values are reported as **peak-to-peak** at the **regulated output (TP3)**.
-- After full-wave rectification, the dominant ripple component is near **120 Hz** (2× line frequency).
+- Ripple values are reported as **peak-to-peak** at the **output across the load resistor (RL)**.
+- For a full-wave rectifier, ripple is primarily near **120 Hz** (2× 60 Hz line frequency).
 
 **No Load**
 
