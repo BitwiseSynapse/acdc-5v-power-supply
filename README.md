@@ -1,5 +1,5 @@
 # AC DC 5V Power Supply
-AC→DC 5 V power supply (bridge rectifier + reservoir capacitor + zener-referenced BJT pass stage); final build for Cal Poly Pomona ECE 2200L Microelectronic Circuits Lab.
+AC DC 5 V power supply (bridge rectifier + reservoir capacitor + zener-referenced BJT pass stage); final build for Cal Poly Pomona ECE 2200L Microelectronic Circuits Lab.
 
 ## Specs (tested at output across RL)
 
